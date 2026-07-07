@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NEO·WATCH — Rastreador de asteroides próximos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- camadas de fundo (estáticas) -->
+  <div class="nw-bg nw-bg-stars"></div>
+  <div class="nw-bg nw-bg-vignette"></div>
+  <div class="nw-bg nw-bg-scanlines"></div>
+
+  <!-- ponto de montagem da aplicação -->
+  <main id="app"></main>
+
+  <!-- módulos carregados em ordem de dependência -->
+  <script src="src/data.js"></script>
+  <script src="src/api.js"></script>
+  <script src="src/format.js"></script>
+  <script src="src/model.js"></script>
+  <script src="src/store.js"></script>
+  <script src="src/ui.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
