@@ -94,7 +94,6 @@
       kmLabel: ldToKm(a.ld),
       threatLabel: t.label, threatColor: t.color, threatDim: t.dim, threatBg: t.bg,
       borderColor: a.closest ? "rgba(255,180,84,.5)" : "rgba(120,180,240,.16)",
-      rulerLeft: ((a.ld / NW.CONFIG.RULER_MAX_LD) * 100).toFixed(1) + "%",
       collected,
       collectLabel: collected ? "✓ CATALOGADO" : "CATALOGAR",
       collectBg: collected ? "rgba(138,255,193,.14)" : "transparent",
@@ -135,15 +134,19 @@
     bars.forEach((b) => { b.pct = Math.max(1.5, (b.m / maxM) * 100).toFixed(1) + "%"; });
 
     // Mini-mapa orbital Terra → Lua → asteroide.
-    const scale = NW.CONFIG.RULER_MAX_LD;
+    // Escala dinâmica: expande em múltiplos de 16 DL até o asteroide caber.
+    const scale = Math.max(NW.CONFIG.RULER_MAX_LD, Math.ceil(a.ld / 16) * 16);
     const rPct = Math.min(a.ld / scale, 0.98) * 50;
     const rad = (a.angle * Math.PI) / 180;
     const moonR = (1 / scale) * 50;
-    const rings = [4, 8, 12, 16].map((dl) => ({
-      size: ((dl / scale) * 100).toFixed(1) + "%",
-      label: dl + " DL",
-      labelTop: (50 - (dl / scale) * 50).toFixed(1) + "%",
-    }));
+    const rings = [1, 2, 3, 4].map((k) => {
+      const dl = (scale / 4) * k;
+      return {
+        size: (k * 25) + "%",
+        label: dl + " DL",
+        labelTop: (50 - k * 12.5).toFixed(1) + "%",
+      };
+    });
 
     return Object.assign(v, {
       riskBars: shapBars(v.risk),
@@ -183,8 +186,14 @@
     const collectedCount = cfg.COLLECTION_BASE + Object.keys(state.collected).length;
     const hazCount = data.filter((a) => a.haz).length;
     const closest = data.reduce((a, b) => (b.ld < a.ld ? b : a), data[0]);
-    const beyondRuler = data.filter((a) => a.ld > cfg.RULER_MAX_LD).length;
+    // Escala da régua: 16 DL por padrão, expande em múltiplos de 16 até caber
+    // pelo menos metade dos objetos (os demais viram o aviso "+N além").
+    const sorted = data.map((a) => a.ld).sort((x, y) => x - y);
+    const median = sorted[Math.floor(sorted.length / 2)] || 0;
+    const rulerScale = Math.max(cfg.RULER_MAX_LD, Math.ceil(median / 16) * 16);
+    const beyondRuler = data.filter((a) => a.ld > rulerScale).length;
     return {
+      rulerScale,
       live: !!state.live,
       liveMeta: state.liveMeta || null,
       hero: {
@@ -198,13 +207,15 @@
       asteroids: data.map((a, i) => {
         const vm = asteroidVM(a, !!state.collected[a.id]);
         vm.tierH = 34 + (i % 3) * 26 + "px"; // altura escalonada dos marcadores na régua
-        vm.onRuler = a.ld <= cfg.RULER_MAX_LD;
+        vm.onRuler = a.ld <= rulerScale;
+        vm.rulerLeft = ((a.ld / rulerScale) * 100).toFixed(1) + "%";
         return vm;
       }),
-      rulerTicks: [0, 4, 8, 12, 16].map((dl) => ({
-        left: (dl / cfg.RULER_MAX_LD) * 100 + "%",
-        label: dl + " DL",
-      })),
+      moonLeft: ((1 / rulerScale) * 100).toFixed(2) + "%",
+      rulerTicks: [0, 1, 2, 3, 4].map((k) => {
+        const dl = (rulerScale / 4) * k;
+        return { left: k * 25 + "%", label: dl + " DL" };
+      }),
       streakLabel: cfg.STREAK_WEEKS + " semanas",
       streakPips: Array.from({ length: 6 }, (_, i) => ({
         bg: i < cfg.STREAK_WEEKS ? "#ffb454" : "rgba(120,180,240,.2)",

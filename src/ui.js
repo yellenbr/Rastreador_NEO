@@ -107,14 +107,14 @@
       <section class="nw-card nw-ruler">
         <div class="nw-ruler-head">
           <div class="nw-mono nw-accent nw-section-title">Régua Terra → Lua</div>
-          <div class="nw-mono nw-muted">1 DL = 384.400 km · escala 0–16 DL</div>
+          <div class="nw-mono nw-muted">1 DL = 384.400 km · escala 0–${d.rulerScale} DL</div>
         </div>
         <div class="nw-ruler-track">
           ${ticks}
           <div class="nw-ruler-baseline"></div>
           <div class="nw-ruler-earth"></div>
-          <div class="nw-ruler-moon"></div>
-          <div class="nw-ruler-moon-label">LUA</div>
+          <div class="nw-ruler-moon" style="left:${d.moonLeft};"></div>
+          <div class="nw-ruler-moon-label" style="left:${d.moonLeft};">LUA</div>
           ${markers}
           ${overflow}
         </div>

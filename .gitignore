@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Segredos
+backend/.env
+
+# Cache de respostas do NeoWs (regenerável)
+backend/data/neows_cache/
+
+# Dados de treino (regeneráveis com backend/train/fetch_data.py; ~9 MB)
+backend/data/*.csv
+
+# Artefatos do Fable (formato antigo)
+.thumbnail
