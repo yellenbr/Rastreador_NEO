@@ -112,3 +112,7 @@ Sem chave, o backend usa `DEMO_KEY` (30 req/h) com cache em disco.
 - CNEOS Close Approach Data API — https://ssd-api.jpl.nasa.gov/doc/cad.html
 - SBDB Query API — https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html
 - Definição de PHA (MOID ≤ 0,05 AU, H ≤ 22) — https://cneos.jpl.nasa.gov/about/neo_groups.html
+
+## Licença
+
+[MIT](LICENSE)

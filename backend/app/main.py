@@ -48,10 +48,15 @@ SBDB = _sbdb.set_index("des")[["e", "i", "q", "diameter", "albedo"]].apply(
     pd.to_numeric, errors="coerce"
 )
 
+# Em produção, defina ALLOWED_ORIGINS no ambiente (ex: "https://seusite.netlify.app").
+# Sem a variável, libera geral — conveniente para desenvolvimento local.
+_allowed_origins = os.getenv("ALLOWED_ORIGINS")
+ALLOWED_ORIGINS = [o.strip() for o in _allowed_origins.split(",")] if _allowed_origins else ["*"]
+
 app = FastAPI(title="Sentinela NEO Risk API", version="1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["GET"],
     allow_headers=["*"],
 )
