@@ -9,8 +9,7 @@
   "use strict";
 
   // Em localhost usa o backend local; em produção, o backend hospedado no Render.
-  // Troque PRODUCTION_API_BASE pela URL real depois do deploy (ex: "https://sentinela-api.onrender.com").
-  const PRODUCTION_API_BASE = "https://sentinela-api.onrender.com";
+  const PRODUCTION_API_BASE = "https://rastreador-neo.onrender.com";
   const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
   const API_BASE = isLocal ? "http://localhost:8000" : PRODUCTION_API_BASE;
 
